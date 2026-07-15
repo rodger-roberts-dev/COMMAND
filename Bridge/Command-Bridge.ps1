@@ -18,6 +18,27 @@ function Show-CommandBridge {
     }
 
     $powerShellVersion = $PSVersionTable.PSVersion.ToString()
+    $powerShellEdition = $PSVersionTable.PSEdition.ToString()
+
+    $bridgeMessage = if($PSVersionTable.PSVersion.Major -lt 7){
+       @(
+            ""
+            "WARNING"
+            "COMMAND is running under Windows Powershell."
+            "Powershell 7 is recommended."
+            ""
+       )
+    }
+    else {
+        @(
+
+            ""
+            " $greeting, Captain."
+            ""
+            " Awaiting Orders...."
+            ""
+        )
+    }
 
     $pythonVersion = try {
         (python --version 2>&1) -replace "Python ", ""
@@ -32,6 +53,7 @@ function Show-CommandBridge {
         "Unavailable"
     }
 
+
     Write-Host ""
     Write-Host "========================================================================================"
     Write-Host "                            COMMAND FLAGSHIP                                            "
@@ -41,13 +63,16 @@ function Show-CommandBridge {
     Write-Host "  Status         : ONLINE"
     Write-Host ""
     Write-Host "  PowerShell     : $powerShellVersion"
+    Write-Host "  Edition        : $powerShellEdition"
     Write-Host "  Python         : $pythonVersion"
     Write-Host "  Git            : $gitVersion"
     Write-Host ""
     Write-Host "----------------------------------------------------------------------------------------"
-    Write-Host " $greeting, Captain."
-    Write-Host ""
-    Write-Host " Awaiting Orders...."
+    
+    $bridgeMessage | ForEach-Object {
+        Write-Host $_
+    }
+
     Write-Host "========================================================================================"
     Write-Host ""
 
